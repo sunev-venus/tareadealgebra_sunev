@@ -7,7 +7,6 @@ const k21 = document.getElementById('k21');
 const k22 = document.getElementById('k22');
 const btnEncriptar = document.getElementById('encriptar');
 const resultado = document.getElementById('resultado');
-
 // Actualizar contador de caracteres
 mensaje.addEventListener('input', () => {
     const len = mensaje.value.length;
