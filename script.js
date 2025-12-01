@@ -7,8 +7,9 @@ const k21 = document.getElementById('k21');
 const k22 = document.getElementById('k22');
 const btnEncriptar = document.getElementById('encriptar');
 const resultado = document.getElementById('resultado');
-const btnDencriptar = document.getElementById(`desencriptar`);
-const dresultado = document.getElementById(`texto`);
+const btnDencriptar = document.getElementById('desencriptar');
+const dresultado = document.getElementById('texto');
+
 // Actualizar contador de caracteres
 mensaje.addEventListener('input', () => {
     const len = mensaje.value.length;
@@ -69,12 +70,6 @@ btnEncriptar.addEventListener('click', () => {
     // Calcular determinante
     const det = (key[0][0] * key[1][1] - key[0][1] * key[1][0]) % 26;
     
-    if (det === 0) {
-        resultado.textContent = 'Error: La matriz no es invertible (determinante = 0)';
-        resultado.classList.add('error');
-        return;
-    }
-    
     // Convertir texto a números
     let numeros = texto.split('').map(char => char.charCodeAt(0) - 65);
     
@@ -100,25 +95,26 @@ btnEncriptar.addEventListener('click', () => {
     resultado.textContent = encriptado;
 });
 
-// Función de desincriptación
+// Función de desencriptación (CORREGIDA)
 btnDencriptar.addEventListener('click', () => {
     // 1. Obtener la matriz clave
     const key = [
         [parseInt(k11.value) || 0, parseInt(k12.value) || 0],
         [parseInt(k21.value) || 0, parseInt(k22.value) || 0]
     ];
-    const texto = mensaje.value.toUpperCase().replace(/[^A-Z]/g, '');
 
-    if (texto.length === 0) {
-        dresultado.textContent = 'Error: Ingresa un mensaje para desencriptar';
+    const texto = resultado.textContent.toUpperCase().replace(/[^A-Z]/g, '');
+
+    if (texto.length === 0 || resultado.classList.contains('error')) {
+        dresultado.textContent = 'Error: Primero debes encriptar un mensaje válido';
         dresultado.classList.add('error');
         return;
     }
-    let det = (key[0][0] * key[1][1] - key[0][1] * key[1][0]) % 26;
-    det = ((det % 26) + 26) % 26;
 
-    // 4. Encontrar el inverso multiplicativo modular del determinante
-    // Buscamos un número 'x' tal que (det * x) % 26 === 1
+    let det = (key[0][0] * key[1][1] - key[0][1] * key[1][0]) % 26;
+    det = ((det % 26) + 26) % 26; // Asegurar positivo
+
+    // Encontrar el inverso multiplicativo modular del determinante
     let detInv = -1;
     for (let i = 1; i < 26; i++) {
         if ((det * i) % 26 === 1) {
@@ -128,27 +124,28 @@ btnDencriptar.addEventListener('click', () => {
     }
 
     if (detInv === -1) {
-        dresultado.textContent = 'Error: La matriz no es invertible (No existe inverso modular)';
+        dresultado.textContent = 'Error: La matriz no es invertible (Determinante no válido)';
         dresultado.classList.add('error');
         return;
     }
 
-    //Calcular la Matriz Inversa
+    // Calcular la Matriz Inversa
     const mod = (n) => ((n % 26) + 26) % 26;
 
-    const ik11 = mod(key[1][1] * detInv);     
-    const ik12 = mod(-key[0][1] * detInv);  
-    const ik21 = mod(-key[1][0] * detInv);    
-    const ik22 = mod(key[0][0] * detInv);     
+    const ik11 = mod(key[1][1] * detInv);      
+    const ik12 = mod(-key[0][1] * detInv);   
+    const ik21 = mod(-key[1][0] * detInv);     
+    const ik22 = mod(key[0][0] * detInv);      
 
-    //Convertir texto cifrado a números
+    // Convertir texto cifrado a números
     let numeros = texto.split('').map(char => char.charCodeAt(0) - 65);
 
+    // Padding de seguridad (aunque al venir de encriptar ya debería ser par)
     if (numeros.length % 2 !== 0) {
-        numeros.push(23); // 'X'
+        numeros.push(23); 
     }
 
-    //Desencriptar multiplicando por la Matriz inversa
+    // Desencriptar multiplicando por la Matriz inversa
     let desencriptado = '';
     for (let i = 0; i < numeros.length; i += 2) {
         const c1 = numeros[i];
@@ -166,5 +163,3 @@ btnDencriptar.addEventListener('click', () => {
     dresultado.classList.remove('error');
     dresultado.textContent = desencriptado;
 });
-
-
