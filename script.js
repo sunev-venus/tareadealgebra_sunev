@@ -7,6 +7,8 @@ const k21 = document.getElementById('k21');
 const k22 = document.getElementById('k22');
 const btnEncriptar = document.getElementById('encriptar');
 const resultado = document.getElementById('resultado');
+const btnDencriptar = document.getElementById(`desencriptar`);
+const dresultado = document.getElementById(`texto`);
 // Actualizar contador de caracteres
 mensaje.addEventListener('input', () => {
     const len = mensaje.value.length;
@@ -97,3 +99,72 @@ btnEncriptar.addEventListener('click', () => {
     resultado.classList.remove('error');
     resultado.textContent = encriptado;
 });
+
+// Función de desincriptación
+btnDencriptar.addEventListener('click', () => {
+    // 1. Obtener la matriz clave
+    const key = [
+        [parseInt(k11.value) || 0, parseInt(k12.value) || 0],
+        [parseInt(k21.value) || 0, parseInt(k22.value) || 0]
+    ];
+    const texto = mensaje.value.toUpperCase().replace(/[^A-Z]/g, '');
+
+    if (texto.length === 0) {
+        dresultado.textContent = 'Error: Ingresa un mensaje para desencriptar';
+        dresultado.classList.add('error');
+        return;
+    }
+    let det = (key[0][0] * key[1][1] - key[0][1] * key[1][0]) % 26;
+    det = ((det % 26) + 26) % 26;
+
+    // 4. Encontrar el inverso multiplicativo modular del determinante
+    // Buscamos un número 'x' tal que (det * x) % 26 === 1
+    let detInv = -1;
+    for (let i = 1; i < 26; i++) {
+        if ((det * i) % 26 === 1) {
+            detInv = i;
+            break;
+        }
+    }
+
+    if (detInv === -1) {
+        dresultado.textContent = 'Error: La matriz no es invertible (No existe inverso modular)';
+        dresultado.classList.add('error');
+        return;
+    }
+
+    //Calcular la Matriz Inversa
+    const mod = (n) => ((n % 26) + 26) % 26;
+
+    const ik11 = mod(key[1][1] * detInv);     
+    const ik12 = mod(-key[0][1] * detInv);  
+    const ik21 = mod(-key[1][0] * detInv);    
+    const ik22 = mod(key[0][0] * detInv);     
+
+    //Convertir texto cifrado a números
+    let numeros = texto.split('').map(char => char.charCodeAt(0) - 65);
+
+    if (numeros.length % 2 !== 0) {
+        numeros.push(23); // 'X'
+    }
+
+    //Desencriptar multiplicando por la Matriz inversa
+    let desencriptado = '';
+    for (let i = 0; i < numeros.length; i += 2) {
+        const c1 = numeros[i];
+        const c2 = numeros[i + 1];
+
+        // Aplicar fórmula: P = K^-1 * C
+        const p1 = mod(ik11 * c1 + ik12 * c2);
+        const p2 = mod(ik21 * c1 + ik22 * c2);
+
+        desencriptado += String.fromCharCode(65 + p1);
+        desencriptado += String.fromCharCode(65 + p2);
+    }
+
+    // Mostrar resultado
+    dresultado.classList.remove('error');
+    dresultado.textContent = desencriptado;
+});
+
+
