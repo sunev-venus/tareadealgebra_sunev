@@ -62,3 +62,20 @@ Se diseñó una interfaz moderna y limpia ("Clean UI") enfocada en la usabilidad
 * **Estilos:** Uso de CSS para centrar elementos, sombras suaves y tipografía clara.
 
 ---
+## Instrucciones de Uso
+
+1.  **Clona o descarga** este repositorio.
+2.  Abre el archivo `index.html` en tu navegador o visita el link del despliegue.
+3.  **Escribe un mensaje** en el cuadro de texto superior (solo letras, sin acentos ni ñ).
+4.  **Ingresa una Clave Numérica** en los 4 recuadros (Matriz 2x2).
+    * *Ejemplo de clave válida:* `15, 17, 1, 4`.
+5.  Haz clic en **Encriptar** para ver el resultado.
+6.  Haz clic en **Desencriptar** para realizar el proceso inverso con el texto cifrado.
+
+---
+
+## Tecnologías Utilizadas
+* HTML5
+* CSS3
+* JavaScript (ES6+)
+* Git & GitHub (Control de versiones)
