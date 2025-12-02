@@ -10,12 +10,15 @@
 Este proyecto es una aplicación web que implementa el algoritmo de **Cifrado Hill**, un método de criptografía de sustitución poligráfica basado en el álgebra lineal. Permite tanto encriptar como desencriptar mensajes utilizando matrices de 2x2.
 
 ---
+
 ### *Puedes probar la aplicación funcionando directamente aquí:*
 **https://sunev-venus.github.io/tareadealgebra_sunev/**
+
 ---
 
 ## Descripción del Proyecto
 El programa es una interfaz gráfica desarrollada con **HTML, CSS y JavaScript** que permite al usuario visualizar cómo las matemáticas detrás de las matrices pueden ocultar y revelar información.
+
 
 ### Funcionalidades Principales:
 1.  **Encriptación:** Convierte texto plano en texto cifrado usando una matriz clave.
@@ -49,5 +52,13 @@ El desafío matemático implementado en el código incluye:
 * **Cálculo del Determinante:** $det = (ad - bc)$.
 * **Inverso Modular:** Se busca un número $x$ tal que $(det \times x) \equiv 1 \pmod{26}$. Si no existe (si el determinante comparte factores con 26), el programa alerta que la matriz no es invertible.
 * **Matriz Adjunta:** Se reorganizan los elementos y se cambian signos, aplicando módulo positivo para evitar números negativos en JavaScript.
+
+---
+
+## Personalización y Diseño
+Se diseñó una interfaz moderna y limpia ("Clean UI") enfocada en la usabilidad:
+* **Feedback Visual:** Si la matriz no es válida, los bordes se tornan rojos y aparece un mensaje de error.
+* **Interactividad:** Un contador de caracteres en tiempo real y una vista previa de la matriz del mensaje (`[7, 14]...`) ayudan a entender el proceso interno.
+* **Estilos:** Uso de CSS para centrar elementos, sombras suaves y tipografía clara.
 
 ---
