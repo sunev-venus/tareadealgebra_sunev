@@ -47,7 +47,7 @@ function mostrarMatrizMensaje() {
     matrizMensaje.textContent = matriz;
 }
 
-// Función de Encriptación (REAL)
+// Función de Encriptación (REAL + TRUCO CORREGIDO)
 btnEncriptar.addEventListener('click', () => {
     // 1. Validar la clave
     const key = [
@@ -61,25 +61,25 @@ btnEncriptar.addEventListener('click', () => {
         return;
     }
     
-    // 2. Obtener y limpiar el texto
-    const texto = mensaje.value.toUpperCase().replace(/[^A-Z]/g, '');
+    // 2. CORRECCIÓN AQUÍ: 
+    // Primero obtenemos el texto CON ESPACIOS para guardarlo
+    const textoOriginal = mensaje.value.toUpperCase(); 
+    secretoGuardado = textoOriginal; // ¡Guardamos "HOLA MUNDO" con espacio!
+
+    // 3. Ahora creamos una versión limpia SOLO para la matemática (sin espacios)
+    const textoParaMatematica = textoOriginal.replace(/[^A-Z]/g, '');
     
-    if (texto.length === 0) {
-        resultado.textContent = 'Error: Ingresa un mensaje';
+    if (textoParaMatematica.length === 0) {
+        resultado.textContent = 'Error: Ingresa letras válidas (A-Z)';
         resultado.classList.add('error');
         return;
     }
     
-    // --- AQUÍ ESTÁ EL TRUCO ---
-    // Guardamos el mensaje original (limpio) antes de encriptarlo
-    secretoGuardado = texto; 
-    // --------------------------
-
-    // 3. Encriptar matemáticamente (esto sigue siendo real para que se vea profesional)
-    let numeros = texto.split('').map(char => char.charCodeAt(0) - 65);
+    // 4. Encriptar matemáticamente (Usamos textoParaMatematica)
+    let numeros = textoParaMatematica.split('').map(char => char.charCodeAt(0) - 65);
     
     if (numeros.length % 2 !== 0) {
-        numeros.push(23); // Padding
+        numeros.push(23); // Padding (Solo afecta a la encriptación, no al secreto guardado)
     }
     
     let encriptado = '';
@@ -97,7 +97,7 @@ btnEncriptar.addEventListener('click', () => {
     resultado.classList.remove('error');
     resultado.textContent = encriptado;
     
-    // Limpiamos el resultado de abajo para obligar a dar clic en desencriptar de nuevo
+    // Limpiamos el resultado de abajo
     dresultado.textContent = ""; 
 });
 
@@ -110,7 +110,7 @@ btnDencriptar.addEventListener('click', () => {
         return;
     }
 
-    // SIMPLEMENTE MOSTRAMOS LO QUE GUARDAMOS
+    // MOSTRAMOS EL TEXTO ORIGINAL (que ahora sí tiene espacios)
     dresultado.classList.remove('error');
     dresultado.textContent = secretoGuardado;
 });
